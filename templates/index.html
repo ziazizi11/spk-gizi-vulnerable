@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPK Penentuan Gizi & Diet Seimbang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-light: #d1fae5;
+            --secondary: #0284c7;
+            --secondary-hover: #0369a1;
+            --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 50%, #f8fafc 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 30px -10px rgba(5, 150, 105, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 0 0 60px;
+            line-height: 1.6;
+        }
+
+        /* Full Width Navbar */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 48px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1680px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            padding: 9px 16px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Full Width Content Container */
+        .container {
+            width: 100%;
+            max-width: 1680px;
+            margin: 28px auto 0;
+            padding: 0 48px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 14px 20px; }
+            .container { padding: 0 20px; }
+        }
+
+        /* Hero Header Banner */
+        .header-card {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 45%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 44px 48px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.32);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .header-card::before {
+            content: "";
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-text {
+            max-width: 850px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge-system {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .header-card h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-card p {
+            font-size: 1.05rem;
+            opacity: 0.94;
+            line-height: 1.65;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+
+        .stat-pill {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-pill strong {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .stat-pill span {
+            font-size: 0.78rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Top Grid: 2 Columns */
+        .grid-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 1100px) {
+            .grid-top {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Bottom Grid: 3 Columns */
+        .grid-bottom {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 1200px) {
+            .grid-bottom {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .card-desc {
+            font-size: 0.94rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Form Controls */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.98rem;
+            color: var(--text-main);
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.12);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 24px;
+            font-family: inherit;
+            font-size: 0.98rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #047857 0%, #0f766e 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(5, 150, 105, 0.35);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+            width: 100%;
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+        }
+
+        .code-input {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.88rem !important;
+            background: #f8fafc !important;
+        }
+
+        /* Criteria Info Tags in SAW Card */
+        .criteria-chips {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip-cal { background: #fef3c7; color: #92400e; }
+        .chip-pro { background: #d1fae5; color: #065f46; }
+        .chip-fat { background: #fee2e2; color: #991b1b; }
+
+        /* Reference Links */
+        .link-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .link-item:hover {
+            border-color: var(--primary);
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transform: translateX(4px);
+        }
+
+        .tag-info {
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Full-Width Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <span class="brand-icon">🥗</span>
+                <span>NutriDecision SPK</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Beranda</a></li>
+                <li><a href="/spk/saw">Ranking SAW</a></li>
+                <li><a href="#import-profil">Import Profil</a></li>
+                <li><a href="/guide?file=general.txt">Pedoman AKG</a></li>
+                <li><a href="/spk/redirect-reference?url=https://promkes.kemkes.go.id">Rujukan Kemenkes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Header Banner -->
+        <header class="header-card">
+            <div class="header-text">
+                <span class="badge-system">Sistem Pendukung Keputusan Nutrisi & Diet</span>
+                <h1>Penentuan Kebutuhan Gizi & Diet Seimbang</h1>
+                <p>Platform komputasi klinis untuk analisis laju basal BMR (Mifflin-St Jeor), estimasi kebutuhan energi harian TDEE, serta perangkingan alternatif menu makanan berbasis metode Simple Additive Weighting (SAW).</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-pill">
+                    <strong>SAW</strong>
+                    <span>Metode SPK</span>
+                </div>
+                <div class="stat-pill">
+                    <strong>AKG</strong>
+                    <span>Standar Acuan</span>
+                </div>
+                <div class="stat-pill">
+                    <strong>3 Kriteria</strong>
+                    <span>Kalori, Pro, Lemak</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Top Section: 2 Columns (Kalkulator Gizi & Perangkingan SAW) -->
+        <div class="grid-top">
+            <!-- Card 1: Kalkulator Kebutuhan Gizi -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-icon">⚡</span>
+                            Kalkulator Kebutuhan Gizi
+                        </div>
+                        <p class="card-desc">Hitung estimasi laju metabolisme basal (BMR) dan kebutuhan kalori harian (TDEE) sesuai target program Anda.</p>
+                    </div>
+
+                    <form action="/calculate" method="POST">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Berat Badan (kg)</label>
+                                <input type="number" step="0.1" name="weight" value="70" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tinggi Badan (cm)</label>
+                                <input type="number" step="0.1" name="height" value="175" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Usia (tahun)</label>
+                                <input type="number" name="age" value="25" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Jenis Kelamin</label>
+                                <select name="gender">
+                                    <option value="male">Laki-laki</option>
+                                    <option value="female">Perempuan</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Target Diet (Kategori SPK)</label>
+                            <select name="goal">
+                                <option value="Defisit">Turun Berat Badan (Defisit Kalori)</option>
+                                <option value="Maintenance">Jaga Berat Badan (Maintenance)</option>
+                                <option value="Surplus">Naik Berat Badan (Surplus Kalori)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Hitung Kebutuhan & Rekomendasi Menu
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Card 2: Perangkingan Multi-Kriteria SAW -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-icon">📊</span>
+                            Perangkingan Multi-Kriteria (SAW)
+                        </div>
+                        <p class="card-desc">Evaluasi matematis alternatif menu menggunakan algoritma Simple Additive Weighting untuk menemukan menu paling optimal.</p>
+                    </div>
+
+                    <div class="criteria-chips">
+                        <span class="chip chip-cal">🔥 Kalori (Cost): 30%</span>
+                        <span class="chip chip-pro">🥩 Protein (Benefit): 50%</span>
+                        <span class="chip chip-fat">🥑 Lemak (Cost): 20%</span>
+                    </div>
+
+                    <form action="/spk/saw" method="GET">
+                        <div class="form-group">
+                            <label>Filter Kategori Menu:</label>
+                            <select name="category">
+                                <option value="">Semua Kategori Alternatif</option>
+                                <option value="Defisit">Kategori: Defisit Kalori</option>
+                                <option value="Maintenance">Kategori: Maintenance</option>
+                                <option value="Surplus">Kategori: Surplus Kalori</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-secondary" style="width: 100%;">
+                            Buka Tabel Perangkingan SAW
+                        </button>
+                    </form>
+                </div>
+
+                <div style="margin-top: 20px; padding: 14px 18px; background: #f8fafc; border-radius: var(--radius-md); font-size: 0.88rem; color: #64748b; border: 1px dashed var(--border-color);">
+                    💡 <em>Metode SAW menormalisasi matriks keputusan alternatif dan mengalikannya dengan bobot preferensi kriteria gizi.</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: 3 Columns (Cari Bahan, Import Profil, Rujukan & Pedoman) -->
+        <div class="grid-bottom">
+            <!-- Card 3: Pencarian Bahan Makanan -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-icon">🔍</span>
+                            Pencarian Bahan Makanan
+                        </div>
+                        <p class="card-desc">Cari informasi kandungan gizi bahan makanan dari basis data gizi.</p>
+                    </div>
+
+                    <form action="/search" method="GET" class="search-box">
+                        <input type="text" name="q" placeholder="Nama bahan (contoh: Salmon, Dada Ayam)..." required>
+                        <button type="submit" class="btn btn-secondary">Cari</button>
+                    </form>
+                </div>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 16px;">Basis data memuat informasi kalori, makronutrisi, dan profil makanan diet.</p>
+            </div>
+
+            <!-- Card 4: Import Profil Preferensi -->
+            <div class="card" id="import-profil">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-icon">📥</span>
+                            Import Profil Preferensi
+                        </div>
+                        <p class="card-desc">Terapkan konfigurasi bobot kustom atau pulihkan sesi analisis sebelumnya.</p>
+                    </div>
+
+                    <form action="/spk/load-profile" method="POST">
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Kode Konfigurasi Bobot (Backup String):</label>
+                            <input type="text" class="code-input" name="profile_data" value="gASVLAAAAAAAAAB9lCiMB2NhbG9yaWVzlEc/1ZmZmZmZmpMHonByb3RlaW6URz/czMzMzMzNjAdmb3RzlEc/yZmZmZmZmqR1Lg==" placeholder="Masukkan kode backup profil..." required>
+                        </div>
+                        <button type="submit" class="btn btn-purple">
+                            Terapkan Profil Preferensi
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Card 5: Pedoman & Sumber Rujukan -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-icon">📚</span>
+                            Pedoman & Rujukan Resmi
+                        </div>
+                        <p class="card-desc">Akses standar Angka Kecukupan Gizi dan regulasi kesehatan masyarakat.</p>
+                    </div>
+
+                    <div class="link-stack">
+                        <a href="/guide?file=general.txt" class="link-item">
+                            <span>📖 Pedoman Standar AKG</span>
+                            <span class="tag-info">Panduan Resmi</span>
+                        </a>
+                        <a href="/spk/redirect-reference?url=https://promkes.kemkes.go.id" class="link-item">
+                            <span>🌐 Promkes Kemenkes RI</span>
+                            <span class="tag-info">Eksternal</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

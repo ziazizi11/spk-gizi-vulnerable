@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+gizi.db
+report_log.txt
+*.sarif
+*.json
+!ground_truth.json

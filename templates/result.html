@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Analisis Kebutuhan Gizi - SPK Gizi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-light: #d1fae5;
+            --secondary: #0284c7;
+            --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 50%, #f8fafc 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 0 0 60px;
+            line-height: 1.6;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 48px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1680px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            padding: 9px 16px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1680px;
+            margin: 28px auto 0;
+            padding: 0 48px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 14px 20px; }
+            .container { padding: 0 20px; }
+        }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 45%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 40px 48px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.32);
+            margin-bottom: 28px;
+        }
+
+        .header-card h1 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .header-card p {
+            opacity: 0.94;
+            font-size: 1.02rem;
+        }
+
+        /* Metric Grid: 3 Columns */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 900px) {
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 26px 28px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .metric-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .icon-orange { background: #ffedd5; color: #ea580c; }
+        .icon-green { background: #d1fae5; color: #059669; }
+        .icon-blue { background: #dbeafe; color: #2563eb; }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        /* Main Content Grid */
+        .result-layout {
+            display: grid;
+            grid-template-columns: 1.8fr 1.2fr;
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 1050px) {
+            .result-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* Food List Table */
+        .food-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 20px;
+        }
+
+        .food-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-align: left;
+            padding: 14px 18px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .food-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.98rem;
+        }
+
+        .food-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .calorie-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #b45309;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+        }
+
+        /* Form Controls */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: #f8fafc;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.12);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 22px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            border: 1.5px solid var(--border-color);
+            color: #334155;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .actions-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <span>🥗</span>
+                <span>NutriDecision SPK</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/spk/saw">Ranking SAW</a></li>
+                <li><a href="/#import-profil">Import Profil</a></li>
+                <li><a href="/guide?file=general.txt">Pedoman AKG</a></li>
+                <li><a href="/spk/redirect-reference?url=https://promkes.kemkes.go.id">Rujukan Kemenkes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header-card">
+            <h1>Hasil Analisis Kebutuhan Gizi & Diet</h1>
+            <p>Estimasi kebutuhan energi harian dan rekomendasi menu makanan berdasarkan profil biometrik Anda.</p>
+        </header>
+
+        <!-- Metrics Row: 3 Wide Cards -->
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-icon icon-orange">🔥</div>
+                <div>
+                    <div class="metric-label">BMR (Laju Basal)</div>
+                    <div class="metric-value">{{ "%.1f"|format(bmr) }} <span style="font-size: 1rem; font-weight: 500;">kcal/hari</span></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon icon-green">⚡</div>
+                <div>
+                    <div class="metric-label">TDEE (Kebutuhan Energi)</div>
+                    <div class="metric-value">{{ "%.1f"|format(tdee) }} <span style="font-size: 1rem; font-weight: 500;">kcal/hari</span></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon icon-blue">🎯</div>
+                <div>
+                    <div class="metric-label">Target Program Diet</div>
+                    <div class="metric-value" style="font-size: 1.35rem;">{{ goal }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2-Column Content Layout -->
+        <div class="result-layout">
+            <!-- Left: Rekomendasi Menu Alternatif -->
+            <div class="card">
+                <div class="card-title">
+                    <span>🍽️ Rekomendasi Menu (Kategori {{ goal }})</span>
+                    <a href="/spk/saw?category={{ goal }}" class="btn btn-secondary">
+                        📊 Buka Ranking SAW Kategori Ini
+                    </a>
+                </div>
+
+                <table class="food-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Menu / Bahan</th>
+                            <th>Kategori Program</th>
+                            <th>Estimasi Kalori</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for food in foods %}
+                        <tr>
+                            <td><strong>{{ food['name'] }}</strong></td>
+                            <td><span style="color: #64748b;">{{ food['category'] }}</span></td>
+                            <td><span class="calorie-badge">{{ food['calories'] }} kcal</span></td>
+                        </tr>
+                    {% endfor %}
+                    {% if not foods %}
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: #94a3b8; padding: 28px;">
+                                Tidak ada rekomendasi menu yang ditemukan untuk target ini.
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+
+                <div style="display: flex; gap: 12px; margin-top: 10px;">
+                    <a href="/spk/saw" class="btn btn-primary" style="width: 100%;">
+                        📊 Evaluasi Semua Alternatif Menggunakan Metode SAW
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Export Catatan Medis & Navigasi -->
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div class="card-title">
+                        <span>📤 Export Ringkasan ke Log Sistem</span>
+                    </div>
+                    <p style="font-size: 0.92rem; color: #64748b; margin-bottom: 12px; line-height: 1.6;">
+                        Simpan riwayat perhitungan BMR, TDEE, dan catatan konsultasi medis/gizi ke arsip sistem.
+                    </p>
+                    <form action="/export" method="POST">
+                        <div class="input-group">
+                            <input type="text" name="notes" placeholder="Catatan tambahan (contoh: Target berat 65kg, alergi kacang)..." required>
+                            <button type="submit" class="btn btn-primary">
+                                Simpan & Export Catatan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #475569; display: block; margin-bottom: 10px;">Tautan Referensi Cepat:</span>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <a href="/guide?file=general.txt" class="btn btn-outline" style="justify-content: flex-start;">📖 Pedoman Angka Kecukupan Gizi (AKG)</a>
+                        <a href="/spk/redirect-reference?url=https://promkes.kemkes.go.id" class="btn btn-outline" style="justify-content: flex-start;">🌐 Rujukan Informasi Promkes Kemenkes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Footer -->
+        <div class="actions-bar">
+            <a href="/" class="btn btn-outline">⬅️ Hitung Ulang Data Biometrik</a>
+            <a href="/spk/saw" class="btn btn-primary">📊 Lihat Semua Ranking SAW Makanan</a>
+        </div>
+    </div>
+</body>
+</html>
