@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -27,7 +29,20 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
           horusec start -p="." -o="json" -f="horusec-results.json" --disable-log=true || true
 
-      # --- EVALUASI AUTOMATIS ---
+      # --- TOOL 3: SONARQUBE / SONARSCANNER ---
+      - name: Run SonarQube Scanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # Kosongkan jika menggunakan SonarCloud/Standalone CLI
+        run: |
+          # Menggunakan SonarScanner CLI untuk menganalisis kode
+          npx sonarqube-scanner \
+            -Dsonar.projectKey=spk-gizi-vulnerable \
+            -Dsonar.sources=. \
+            -Dsonar.exclusions=**/templates/**,**/scripts/** \
+            -Dsonar.sarif.reportPaths=sonarqube-results.json || true
+
+      # --- EVALUASI AUTOMATIS CONFUSION MATRIX ---
       - name: Run Evaluation Script
         run: |
           python scripts/evaluate.py
