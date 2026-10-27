@@ -3,16 +3,15 @@ import os
 
 def load_ground_truth(file_path):
     if not os.path.exists(file_path):
-        print(f"[DEBUG] File {file_path} TIDAK DITEMUKAN!")
         return set()
     with open(file_path, 'r') as f:
         data = json.load(f)
     return set((os.path.basename(item['file']), int(item['line'])) for item in data)
 
-def parse_semgrep(file_path):
+def parse_sarif(file_path):
+    """Parser generik untuk format SARIF (Semgrep, CodeQL, SonarQube SARIF)"""
     findings = set()
     if not os.path.exists(file_path):
-        print(f"[DEBUG] {file_path} TIDAK DITEMUKAN!")
         return findings
     try:
         with open(file_path, 'r') as f:
@@ -26,49 +25,42 @@ def parse_semgrep(file_path):
                         if uri and line:
                             findings.add((os.path.basename(uri), int(line)))
     except Exception as e:
-        print(f"Error parsing Semgrep: {e}")
-    print(f"[DEBUG] Semgrep Raw Findings: {len(findings)}")
-    return findings
-
-def parse_horusec(file_path):
-    findings = set()
-    if not os.path.exists(file_path):
-        print(f"[DEBUG] {file_path} TIDAK DITEMUKAN!")
-        return findings
-    try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-            vulns = data.get('analysisVulnerabilities', [])
-            if not vulns and isinstance(data, list):
-                vulns = data
-            for item in vulns:
-                vuln = item.get('vulnerability', item)
-                file_name = vuln.get('file', '')
-                line = vuln.get('line')
-                if file_name and line:
-                    findings.add((os.path.basename(file_name), int(line)))
-    except Exception as e:
-        print(f"Error parsing Horusec: {e}")
-    print(f"[DEBUG] Horusec Raw Findings: {len(findings)}")
+        print(f"Error parsing SARIF {file_path}: {e}")
     return findings
 
 def parse_bandit(file_path):
     findings = set()
     if not os.path.exists(file_path):
-        print(f"[DEBUG] {file_path} TIDAK DITEMUKAN!")
         return findings
     try:
         with open(file_path, 'r') as f:
             data = json.load(f)
-            results = data.get('results', [])
-            for result in results:
+            for result in data.get('results', []):
                 file_name = result.get('filename', '')
                 line = result.get('line_number')
                 if file_name and line:
                     findings.add((os.path.basename(file_name), int(line)))
     except Exception as e:
         print(f"Error parsing Bandit: {e}")
-    print(f"[DEBUG] Bandit Raw Findings: {len(findings)}")
+    return findings
+
+def parse_sonarqube_json(file_path):
+    findings = set()
+    if not os.path.exists(file_path):
+        return findings
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+            if 'issues' in data:
+                for issue in data.get('issues', []):
+                    component = issue.get('component', '').split(':')[-1]
+                    line = issue.get('line')
+                    if component and line:
+                        findings.add((os.path.basename(component), int(line)))
+            elif 'runs' in data:
+                return parse_sarif(file_path)
+    except Exception as e:
+        print(f"Error parsing SonarQube JSON: {e}")
     return findings
 
 def evaluate_scenario(name, detected_set, gt_set):
@@ -92,24 +84,35 @@ def evaluate_scenario(name, detected_set, gt_set):
 
 def main():
     gt_set = load_ground_truth('ground_truth.json')
-    print(f"[DEBUG] Ground Truth Target Count: {len(gt_set)}")
 
-    semgrep_set = parse_semgrep('semgrep-results.json')
-    horusec_set = parse_horusec('horusec-results.json')
+    # Parsing hasil 4 tools
+    semgrep_set = parse_sarif('semgrep-results.json')
     bandit_set = parse_bandit('bandit-results.json')
+    codeql_set = parse_sarif('codeql-results.sarif')
+    sonar_set = parse_sonarqube_json('sonarqube-results.json')
 
     results = []
+
+    # Skenario A: Individual Tools
     results.append(evaluate_scenario("Skenario A - Semgrep", semgrep_set, gt_set))
-    results.append(evaluate_scenario("Skenario A - Horusec", horusec_set, gt_set))
     results.append(evaluate_scenario("Skenario A - Bandit", bandit_set, gt_set))
+    results.append(evaluate_scenario("Skenario A - CodeQL", codeql_set, gt_set))
+    results.append(evaluate_scenario("Skenario A - SonarQube", sonar_set, gt_set))
 
-    results.append(evaluate_scenario("Skenario B - Semgrep + Horusec", semgrep_set.union(horusec_set), gt_set))
+    # Skenario B: Kombinasi 2 Tools (Union / OR)
     results.append(evaluate_scenario("Skenario B - Semgrep + Bandit", semgrep_set.union(bandit_set), gt_set))
-    results.append(evaluate_scenario("Skenario B - Horusec + Bandit", horusec_set.union(bandit_set), gt_set))
+    results.append(evaluate_scenario("Skenario B - Semgrep + CodeQL", semgrep_set.union(codeql_set), gt_set))
+    results.append(evaluate_scenario("Skenario B - Bandit + CodeQL", bandit_set.union(codeql_set), gt_set))
 
-    results.append(evaluate_scenario("Skenario C - Semgrep + Horusec + Bandit", semgrep_set.union(horusec_set).union(bandit_set), gt_set))
+    # Skenario C: Kombinasi 3 & 4 Tools (Union / OR)
+    all_three = semgrep_set.union(bandit_set).union(codeql_set)
+    all_four = all_three.union(sonar_set)
+    
+    results.append(evaluate_scenario("Skenario C - Semgrep + Bandit + CodeQL", all_three, gt_set))
+    results.append(evaluate_scenario("Skenario C - Semgrep + Bandit + CodeQL + SonarQube", all_four, gt_set))
 
-    summary_md = f"### 📊 Ringkasan Evaluasi Kinerja SAST\n"
+    # Output Markdown ke GitHub Step Summary
+    summary_md = f"### 📊 Ringkasan Evaluasi Kinerja SAST (4 Tools)\n"
     summary_md += f"**Total Ground Truth Vulnerabilities:** {len(gt_set)}\n\n"
     summary_md += "| Skenario Pengujian | TP | FP | FN | Precision (%) | Recall (%) | F1-Score (%) |\n"
     summary_md += "| :--- | :---: | :---: | :---: | :---: | :---: | :---: |\n"
