@@ -30,6 +30,7 @@ jobs:
       # --- TOOL 3: BANDIT ---
       - name: Run Bandit
         run: |
+          pip install bandit
           bandit -r . -f json -o bandit-results.json || true
 
       # --- EVALUASI OTOMATIS CONFUSION MATRIX ---
