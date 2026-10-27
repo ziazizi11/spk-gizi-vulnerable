@@ -1,0 +1,39 @@
+name: SAST Evaluation Pipeline (3 Tools)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sast_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # --- TOOL 1: SEMGREP ---
+      - name: Run Semgrep
+        run: |
+          pip install semgrep
+          semgrep scan --config=auto --sarif --output=semgrep-results.json . || true
+
+      # --- TOOL 2: HORUSEC ---
+      - name: Run Horusec
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
+          horusec start -p="." -o="json" -f="horusec-results.json" --disable-log=true || true
+
+      # --- TOOL 3: BANDIT ---
+      - name: Run Bandit
+        run: |
+          pip install bandit
+          bandit -r . -f json -o bandit-results.json || true
+
+      # --- EVALUASI OTOMATIS CONFUSION MATRIX ---
+      - name: Run Evaluation Script
+        run: |
+          python scripts/evaluate.py
