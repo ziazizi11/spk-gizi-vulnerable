@@ -19,8 +19,8 @@ jobs:
       - name: Run Semgrep
         run: |
           pip install semgrep
-          semgrep scan --config="p/python" --config="p/flask" --config="p/owasp-top-10" --config="p/security-audit" --sarif --output=semgrep-results.json . || true
-
+          semgrep scan --config=auto --sarif --output=semgrep-results.json . || true
+          
       # --- TOOL 2: HORUSEC ---
       - name: Run Horusec
         run: |
@@ -30,8 +30,7 @@ jobs:
       # --- TOOL 3: BANDIT ---
       - name: Run Bandit
         run: |
-          pip install bandit
-          bandit -r . -ill -f json -o bandit-results.json || true
+          bandit -r . -f json -o bandit-results.json || true
 
       # --- EVALUASI OTOMATIS CONFUSION MATRIX ---
       - name: Run Evaluation Script
