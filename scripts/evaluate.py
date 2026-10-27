@@ -2,6 +2,7 @@ import json
 import os
 import sys
 
+# Dukungan output UTF-8 untuk terminal Windows
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
