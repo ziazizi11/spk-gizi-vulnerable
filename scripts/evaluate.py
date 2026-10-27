@@ -1,5 +1,9 @@
 import json
 import os
+import sys
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 def load_ground_truth(file_path):
     if not os.path.exists(file_path):
@@ -123,7 +127,7 @@ def main():
     print(summary_md)
 
     if 'GITHUB_STEP_SUMMARY' in os.environ:
-        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
             f.write(summary_md)
 
 if __name__ == '__main__':
